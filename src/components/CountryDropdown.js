@@ -10,7 +10,7 @@ const CountryDropdown = () => {
   const { country, setCountry, countries } = useContext(HouseContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <Menu as='div' className='dropdown relative'>
+    <Menu as='div' className='dropdown relative bg-white'>
       <Menu.Button
         onClick={() => setIsOpen(!isOpen)}
         className='dropdown-btn w-full text-left'
