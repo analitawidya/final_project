@@ -11,10 +11,10 @@ import PropertyDetails from './pages/PropertyDetails';
 import Login from './pages/Login';
 import Register from './pages/Register'
 import Admin from './pages/admin'
-
+import Profile from './pages/profile';
 const App = () => {
   return (
-    <div className='max-w-[1440px] mx-auto bg-cyan-300'>
+    <div className='max-w-[7680px] mx-auto bg-cyan-300'>
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -22,6 +22,7 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/admin' element={<Admin />} />
+        <Route path='/profile' element={<Profile />} />
       </Routes>
       <Footer />
     </div>

@@ -1,50 +1,156 @@
-import React from 'react';
+import { useState } from "react"; 
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-// import link
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-// import logo
-import Logo from '../assets/img/Logo1.jpeg';
+
 
 const Header = () => {
-  return (
-    
-<nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
-  <div class="container flex flex-wrap justify-between items-center mx-auto">
-  <Link as={Link} to ="/">
-        
-    <div className='text-left font-bold'>
-              <span className='text-violet-400'>Lala</span><b>Rent</b>
-            </div>
-            </Link>
-    <button data-collapse-toggle="mobile-menu" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu" aria-expanded="false">
-      <span class="sr-only">Open main menu</span>
-      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-      <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
-      <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-        <li>
-        <Link as={Link} to ="/">
-        <button type="button"  class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Home</button>
-        </Link>
-        </li>
-        <li>
-        <Link as={Link} to ="/register">
-        <button type="button" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Sign Up</button>
-        </Link>
-        </li>
-        <li>
-        <Link as={Link} to ="/login">
-        <button type="button" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Login</button>
-        </Link>
-        </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
+  const [isNavOpen, setIsNavOpen] = useState(false);
+      const navigate = useNavigate();
+      const isLogin = Cookies.get("refreshToken");
 
+      const Logout = async () => {
+        try {
+          await axios.delete("http://localhost:8000/logout");
+          navigate("/");
+        } catch (error) {
+          if (error.response) {
+            console.log(error.response.data);
+          }
+        }
+      };
+
+  return (
+    <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
+      <div class="container-lg flex flex-wrap justify-between items-center mx-auto">
+        <Link as={Link} to="/">
+          <div className="text-left font-bold ml-10">
+            <span className="text-violet-400 text-4xl">Lala</span>
+            <b className="text-4xl">Rent</b>
+          </div>
+        </Link>
+        <nav>
+          <section className="MOBILE-MENU flex lg:hidden">
+            <div
+              className="HAMBURGER-ICON space-y-2"
+              onClick={() => setIsNavOpen((prev) => !prev)} // toggle isNavOpen state on click
+            >
+              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+            </div>
+
+            <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
+              {" "}
+              <div
+                className="CROSS-ICON absolute top-0 right-0 px-8 py-8"
+                onClick={() => setIsNavOpen(false)} // change isNavOpen state to false to close the menu
+              >
+                <svg
+                  className="h-8 w-8 text-gray-600"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </div>
+              {isLogin ? (
+                <ul className="MENU-LINK-MOBILE-OPEN flex flex-col items-center justify-between min-h-[250px]">
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/">Home</a>
+                  </li>
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/admin">Admin</a>
+                  </li>
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/profile">Profile</a>
+                  </li>
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a onClick={Logout}>Logout</a>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="MENU-LINK-MOBILE-OPEN flex flex-col items-center justify-between min-h-[250px]">
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/">Home</a>
+                  </li>
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/login">Login</a>
+                  </li>
+                  <li className="border-b border-gray-400 my-8 uppercase">
+                    <a href="/register">Register</a>
+                  </li>
+                </ul>
+              )}
+            </div>
+          </section>
+
+          {isLogin ? (
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <ul className="DESKTOP-MENU hidden space-x-8 lg:flex mt-4">
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/admin">Admin</Link>
+                </li>
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li></li>
+              </ul>
+              <button
+                className="DESKTOP-MENU hidden space-x-8 lg:flex mt-2 bg-violet-700 hover:bg-violet-800 text-white transitionfocus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 h-10"
+                onClick={Logout}
+                type="submit"
+                
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </ul>
+          )}
+        </nav>
+        <style>{`
+      .hideMenuNav {
+        display: none;
+      }
+      .showMenuNav {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background: white;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+    `}</style>
+      </div>
+    </nav>
   );
 };
 
